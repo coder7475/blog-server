@@ -22,9 +22,22 @@ async function run() {
     const progDB = client.db('Prog-blogs');
     const allBlogsCol = progDB.collection('allBlogs');
 
-    // get all blogs 
+    // get all blogs : 
+    /***
+     * * situation 1: /api/v1/allBlogs
+     * * situation 1: /api/v1/allBlogs?category=<name>
+     */
     app.get('/api/v1/allBlogs', async(req, res) => {
-      const allBlogs = await allBlogsCol.find().toArray();
+      const query = {};
+
+      const category = req.query.category;
+
+      if (category) {
+        query["category"] = category;
+      }
+
+      const allBlogs = await allBlogsCol.find(query).toArray();
+
       res.send(allBlogs);
     })
 
