@@ -24,7 +24,7 @@ async function run() {
     // await client.connect();
     const progDB = client.db('Prog-blogs');
     const allBlogsCol = progDB.collection('allBlogs');
-
+    const wishlistCol = progDB.collection('wishlist');
     // get total number of blogs
     app.get('/api/v1/totalBlogs', async(req, res) => {
       const total = await allBlogsCol.estimatedDocumentCount();
@@ -89,11 +89,33 @@ async function run() {
     })
 
     // add to the wishlist
+    // situation 1: user sends his wished blog to wishlish with his wishMail
+    // ?userMail=Email
     app.post('/api/v1/user/add-to-wishlist/:blogId', async(req, res) => {
       const id = req.params.blogId;
-      const query = { _id: new ObjectId(id) }
-      const blog = await allBlogsCol.find(query).toArray();
-      console.log(blog);
+      const blogId = { _id: new ObjectId(id) }
+      const userMail = req.query.userMail;
+      const blog = await allBlogsCol.findOne(blogId); // got the blog he wished
+      blog.userMail = userMail;
+      // console.log(blog);
+      const query = { 
+        _id: new ObjectId(id)
+       }
+      if (userMail) {
+        query['userMail'] = userMail;
+      }
+
+      // console.log(query);
+      const exists = await wishlistCol.findOne(query); // does it already exits
+      // console.log(exists);
+      if(exists === null){
+        const ack = await wishlistCol.insertOne(blog);
+        res.send(ack);
+      }
+      else
+        res.send({ acknowledge: false })
+      // console.log(exists);
+      // console.log(blog);
     })
 
     // update blog in the database
@@ -137,9 +159,9 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send(`Programmer Blog Server is running`)
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Programmers Blog server is listening to port ${port}`)
 })
