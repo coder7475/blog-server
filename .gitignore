@@ -1,2 +1,5 @@
+.env
+.vercel
 node_modules
-*.json
+data.json
+comments.json
