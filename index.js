@@ -25,11 +25,18 @@ async function run() {
     // get all blogs 
     app.get('/api/v1/allBlogs', async(req, res) => {
       const allBlogs = await allBlogsCol.find().toArray();
-
       res.send(allBlogs);
     })
 
-
+    // get the latest 6 blogs
+    app.get('/api/v1/latestBlogs', async(req, res) => {
+      const latestBlogs = await allBlogsCol.find({})
+                                           .sort({ timestamp: -1 })
+                                           .limit(6)
+                                           .toArray();
+                          
+      res.send(latestBlogs);
+    })
 
 
     // Send a ping to confirm a successful connection
