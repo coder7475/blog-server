@@ -32,16 +32,22 @@ async function run() {
      * * situation 1: /api/v1/allBlogs
      * * situation 2: /api/v1/allBlogs?category=<name> # filter by category
      * * situation 3: /api/v1/allBlogs?page=<number>&size=<number> # pagination
+     * * situation 4: /api/v1/allBlogs?title=`blogName`  # search
      */
     app.get('/api/v1/allBlogs', async(req, res) => {
       const query = {};
       // filter by category
       const category = req.query.category;
 
-      if (category) {
+      if (category)
         query["category"] = category;
-      } 
       
+      // Search By title
+      const title = req.query.title;
+
+      if (title)
+        query["title"] = title;
+
       // Pagination
       const page = Number(req.query.page);
       const size = Number(req.query.size);
