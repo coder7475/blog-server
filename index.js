@@ -17,6 +17,26 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   }
 });
+// define middleware
+const tokenChecker = (req, res, next) => {
+  const token = req?.cookies?.token;
+  // no token = 401 Unauthorized
+  if (!token)
+    return res.status(401).send({ message: "You don't have authorization" });
+
+  // token available -> verify with jwt
+  jwt.verify(token, 
+              process.env.SECRET, 
+              (err, decoded) => {
+                // verification failed - 401(Forbidden)
+                if (err)
+                  return res.status(401).send({ message: "Your token has expired"})
+
+                // token passed verification
+                req.user = decoded;
+                next();
+              })
+}
 
 // parser
 app.use(express.json());

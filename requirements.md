@@ -50,5 +50,6 @@
 
 ## Auth:
 
-- /api/v1/access-token(POST) 
-- /api/v1/clear-token(POST)
+- /api/v1/access-token(POST) [Done]
+- /api/v1/clear-token(POST) [Done]
+- create middleware tokenChecker [Done]
