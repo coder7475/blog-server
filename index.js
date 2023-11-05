@@ -88,6 +88,14 @@ async function run() {
       res.send(ack);
     })
 
+    // add to the wishlist
+    app.post('/api/v1/user/add-to-wishlist/:blogId', async(req, res) => {
+      const id = req.params.blogId;
+      const query = { _id: new ObjectId(id) }
+      const blog = await allBlogsCol.find(query).toArray();
+      console.log(blog);
+    })
+
     // update blog in the database
     app.patch('/api/v1/user/update-blog/:blogId', async(req, res) => {
       const id = req.params.blogId;
@@ -97,7 +105,7 @@ async function run() {
         title, author, 
         email, image, category, 
         short_description, 
-        long_descripton, 
+        long_description, 
         timestamp,
         wordCount
       } = blog;
@@ -107,7 +115,7 @@ async function run() {
           title, author, 
           email, image, category, 
           short_description, 
-          long_descripton, 
+          long_description, 
           timestamp,
           wordCount
         }
