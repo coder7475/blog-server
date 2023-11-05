@@ -22,9 +22,12 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
+    // Database
     const progDB = client.db('Prog-blogs');
+    // Collections
     const allBlogsCol = progDB.collection('allBlogs');
     const wishlistCol = progDB.collection('wishlist');
+    const commentsCol = progDB.collection('comments');
     // get total number of blogs
     app.get('/api/v1/totalBlogs', async(req, res) => {
       const total = await allBlogsCol.estimatedDocumentCount();
@@ -171,6 +174,24 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const ack = await wishlistCol.deleteOne(query);
+      res.send(ack);
+    })
+
+    // comment related api
+    // add a comment to the blog
+    // /api/v1/user/create-comment
+    app.post('/api/v1/user/create-comment', async(req, res) => {
+      const comment = req.body;
+      const ack = await commentsCol.insertOne(comment);
+      res.send(ack);
+    })
+
+    // find all comment for specific blog
+    // /api/v1/allComments/:blogId
+    app.get('/api/v1/user/allComments/:blogId', async(req, res) => {
+      const id = req.params.blogId;
+      const query = { blog_id: id }
+      const ack = await commentsCol.find(query).toArray();
       res.send(ack);
     })
 
