@@ -22,11 +22,16 @@ async function run() {
     const progDB = client.db('Prog-blogs');
     const allBlogsCol = progDB.collection('allBlogs');
 
+    // get total number of blogs
+    app.get('/api/v1/totalBlogs', async(req, res) => {
+      const total = await allBlogsCol.estimatedDocumentCount();
+      res.send({ total });
+    })
     // get all blogs : 
     /***
      * * situation 1: /api/v1/allBlogs
-     * * situation 2: /api/v1/allBlogs?category=<name> // filter by category
-     * * situation 3: /api/v1/allBlogs/
+     * * situation 2: /api/v1/allBlogs?category=<name> # filter by category
+     * * situation 3: /api/v1/allBlogs?page=<number>&size=<number> # pagination
      */
     app.get('/api/v1/allBlogs', async(req, res) => {
       const query = {};
