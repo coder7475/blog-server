@@ -30,7 +30,7 @@ async function run() {
 
     // get the latest 6 blogs
     app.get('/api/v1/latestBlogs', async(req, res) => {
-      const latestBlogs = await allBlogsCol.find({})
+      const latestBlogs = await allBlogsCol.find()
                                            .sort({ timestamp: -1 })
                                            .limit(6)
                                            .toArray();
@@ -38,6 +38,13 @@ async function run() {
       res.send(latestBlogs);
     })
 
+    // get the top 10 featured blogs based on wordCount of long description
+    app.get('/api/v1/featuredBlogs', async(req, res) => {
+      const featuredBlogs = await allBlogsCol.find().sort({ wordCount: -1 })
+                                          .limit(10).toArray();
+
+      res.send(featuredBlogs);                                          
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
