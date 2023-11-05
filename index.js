@@ -1,6 +1,6 @@
 const express = require('express')
 const dotenv = require('dotenv');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 dotenv.config()
 const app = express()
@@ -14,6 +14,9 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   }
 });
+
+// parser
+app.use(express.json());
 
 async function run() {
   try {
@@ -75,6 +78,43 @@ async function run() {
                                           .limit(10).toArray();
 
       res.send(featuredBlogs);                                          
+    })
+
+    // insert blog to database
+    app.post('/api/v1/user/create-blog', async(req, res) => {
+      const blog = req.body;
+      // console.log(blog);
+      const ack = await allBlogsCol.insertOne(blog);
+      res.send(ack);
+    })
+
+    // update blog in the database
+    app.patch('/api/v1/user/update-blog/:blogId', async(req, res) => {
+      const id = req.params.blogId;
+      const query = { _id: new ObjectId(id) }
+      const blog = req.body;
+      const { 
+        title, author, 
+        email, image, category, 
+        short_description, 
+        long_descripton, 
+        timestamp,
+        wordCount
+      } = blog;
+      // console.log(blog);
+      const updatedDoc = {
+        $set: { 
+          title, author, 
+          email, image, category, 
+          short_description, 
+          long_descripton, 
+          timestamp,
+          wordCount
+        }
+      }
+      // console.log(id);
+      const result = await allBlogsCol.updateOne(query, updatedDoc);
+      res.send(result);
     })
 
     // Send a ping to confirm a successful connection
