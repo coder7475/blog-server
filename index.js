@@ -35,14 +35,20 @@ async function run() {
      */
     app.get('/api/v1/allBlogs', async(req, res) => {
       const query = {};
-
+      // filter by category
       const category = req.query.category;
 
       if (category) {
         query["category"] = category;
-      }
+      } 
+      
+      // Pagination
+      const page = Number(req.query.page);
+      const size = Number(req.query.size);
+      const skip = page * size;
+      // console.log(page, size);
 
-      const allBlogs = await allBlogsCol.find(query).toArray();
+      const allBlogs = await allBlogsCol.find(query).skip(skip).limit(size).toArray();
 
       res.send(allBlogs);
     })

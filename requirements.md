@@ -32,8 +32,8 @@
 
 - /api/v1/allBlogs (GET) [Done]
     - Filter by category : /allBlogs?category=`name` [Done]
-    - Search: /api/v1/allBlogs?title=`blogName`
     - Pagination:/api/v1/allBlogs?page=`number`&size=`number`
+    - Search: /api/v1/allBlogs?title=`blogName`
 - /api/v1/totalBlogs (GET)
 - /api/v1/latestBlogs (GET) [Done]
 - /api/v1/featuredBlogs(GET) [Done]
