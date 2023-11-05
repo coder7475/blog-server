@@ -1,6 +1,7 @@
 const express = require('express')
 const dotenv = require('dotenv');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
@@ -22,6 +23,7 @@ app.use(express.json());
 
 // middleware
 app.use(cors())
+app.use(cookieParser());
 
 async function run() {
   try {
