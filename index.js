@@ -25,7 +25,8 @@ async function run() {
     // get all blogs : 
     /***
      * * situation 1: /api/v1/allBlogs
-     * * situation 1: /api/v1/allBlogs?category=<name>
+     * * situation 2: /api/v1/allBlogs?category=<name> // filter by category
+     * * situation 3: /api/v1/allBlogs/
      */
     app.get('/api/v1/allBlogs', async(req, res) => {
       const query = {};
