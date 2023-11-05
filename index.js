@@ -118,7 +118,7 @@ async function run() {
     })
 
     // insert blog to database
-    app.post('/api/v1/user/create-blog', async(req, res) => {
+    app.post('/api/v1/user/create-blog', tokenChecker, async(req, res) => {
       const blog = req.body;
       // console.log(blog);
       const ack = await allBlogsCol.insertOne(blog);
@@ -126,7 +126,7 @@ async function run() {
     })
   
     // update blog in the database
-    app.patch('/api/v1/user/update-blog/:blogId', async(req, res) => {
+    app.patch('/api/v1/user/update-blog/:blogId', tokenChecker, async(req, res) => {
       const id = req.params.blogId;
       const query = { _id: new ObjectId(id) }
       const blog = req.body;
@@ -161,7 +161,7 @@ async function run() {
      * * Find the wishlist for the current user
      * * situation: api/v1/user/wishlist?userMail=abc@gmail.com
     */
-    app.get('/api/v1/user/wishlist', async(req, res) => {
+    app.get('/api/v1/user/wishlist', tokenChecker, async(req, res) => {
       const userMail = req.query.userMail;
       // console.log(userMail);
       const query = { }
@@ -176,7 +176,7 @@ async function run() {
     // add to the wishlist
     // situation 1: user sends his wished blog to wishlish with his wishMail
     // ?userMail=Email
-    app.post('/api/v1/user/add-to-wishlist/:blogId', async(req, res) => {
+    app.post('/api/v1/user/add-to-wishlist/:blogId', tokenChecker, async(req, res) => {
       const id = req.params.blogId;
       const blogId = { _id: new ObjectId(id) }
       const userMail = req.query.userMail;
@@ -204,7 +204,7 @@ async function run() {
     })
 
     // remove from wishlist
-    app.delete('/api/v1/user/remove-from-wishlist/:id', async(req, res) => {
+    app.delete('/api/v1/user/remove-from-wishlist/:id', tokenChecker, async(req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const ack = await wishlistCol.deleteOne(query);
@@ -214,7 +214,7 @@ async function run() {
     // comment related api
     // add a comment to the blog
     // /api/v1/user/create-comment
-    app.post('/api/v1/user/create-comment', async(req, res) => {
+    app.post('/api/v1/user/create-comment', tokenChecker, async(req, res) => {
       const comment = req.body;
       const ack = await commentsCol.insertOne(comment);
       res.send(ack);
@@ -222,7 +222,7 @@ async function run() {
 
     // find all comment for specific blog
     // /api/v1/allComments/:blogId
-    app.get('/api/v1/user/allComments/:blogId', async(req, res) => {
+    app.get('/api/v1/user/allComments/:blogId', tokenChecker, async(req, res) => {
       const id = req.params.blogId;
       const query = { blog_id: id }
       const ack = await commentsCol.find(query).toArray();
