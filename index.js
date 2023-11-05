@@ -87,6 +87,54 @@ async function run() {
       const ack = await allBlogsCol.insertOne(blog);
       res.send(ack);
     })
+  
+    // update blog in the database
+    app.patch('/api/v1/user/update-blog/:blogId', async(req, res) => {
+      const id = req.params.blogId;
+      const query = { _id: new ObjectId(id) }
+      const blog = req.body;
+      const { 
+        title, author, 
+        email, image, category, 
+        short_description, 
+        long_description, 
+        timestamp,
+        wordCount
+      } = blog;
+      // console.log(blog);
+      const updatedDoc = {
+        $set: { 
+          title, author, 
+          email, image, category, 
+          short_description, 
+          long_description, 
+          timestamp,
+          wordCount
+        }
+      }
+      // console.log(id);
+      const result = await allBlogsCol.updateOne(query, updatedDoc);
+      res.send(result);
+    })
+
+    // wishlist related api
+
+
+    /**
+     * * Find the wishlist for the current user
+     * * situation: api/v1/user/wishlist?userMail=abc@gmail.com
+    */
+    app.get('/api/v1/user/wishlist', async(req, res) => {
+      const userMail = req.query.userMail;
+      // console.log(userMail);
+      const query = { }
+      if(userMail)
+        query['userMail'] = userMail;
+
+      // console.log(query);
+      const ack = await wishlistCol.find(query).toArray();
+      res.send(ack);
+    })
 
     // add to the wishlist
     // situation 1: user sends his wished blog to wishlish with his wishMail
@@ -116,35 +164,6 @@ async function run() {
         res.send({ acknowledge: false })
       // console.log(exists);
       // console.log(blog);
-    })
-
-    // update blog in the database
-    app.patch('/api/v1/user/update-blog/:blogId', async(req, res) => {
-      const id = req.params.blogId;
-      const query = { _id: new ObjectId(id) }
-      const blog = req.body;
-      const { 
-        title, author, 
-        email, image, category, 
-        short_description, 
-        long_description, 
-        timestamp,
-        wordCount
-      } = blog;
-      // console.log(blog);
-      const updatedDoc = {
-        $set: { 
-          title, author, 
-          email, image, category, 
-          short_description, 
-          long_description, 
-          timestamp,
-          wordCount
-        }
-      }
-      // console.log(id);
-      const result = await allBlogsCol.updateOne(query, updatedDoc);
-      res.send(result);
     })
 
     // Send a ping to confirm a successful connection

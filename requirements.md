@@ -43,7 +43,7 @@
 - /api/v1/user/create-blog (POST) [Done]
 - /api/v1/user/update-blog/:blogId(PATCH) [Done]
 - /api/v1/user/add-to-wishlist/:blogId(POST) [Done]
-- /api/v1/user/wishlist?email=userMail 
+- /api/v1/user/wishlist?email=userMail [Done]
 - /api/v1/user/remove-from-wishlist(DELETE)
 - /api/v1/create-comments(POST)
 - /api/v1/allComments/:blogsId(GET)
