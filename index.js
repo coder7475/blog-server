@@ -237,7 +237,7 @@ async function run() {
       res
         .cookie('token', token, {
           httpOnly: true,
-          secure: false, // ! make it true before deployment
+          secure: true, // ! make it true before deployment
           sameSite: 'none'
         })
         .send({ success: true });
