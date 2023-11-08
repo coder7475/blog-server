@@ -72,8 +72,8 @@ async function run() {
      * * situation 1: /api/v1/allBlogs
      * * situation 2: /api/v1/allBlogs?category=<name> # filter by category
      * * situation 3: /api/v1/allBlogs?page=<number>&size=<number> # pagination
-     * * situation 4: /api/v1/allBlogs?title=`blogName`  # search by title
-     * * situation 5: /api/v1/allBlogs?id=`id`  # search by id
+     * * situation 4: /api/v1/allBlogs?title=`blogName`  # search
+     * * situation 4: /api/v1/allBlogs?title=`blogName`  # search
      */
     app.get('/api/v1/allBlogs', async(req, res) => {
       const query = {};
@@ -85,12 +85,9 @@ async function run() {
       
       // Search By title
       const title = req.query.title;
-      const id = req.query.id;
 
       if (title)
         query["title"] = title;
-      if (id)
-        query["_id"] = new ObjectId(id);
 
       // Pagination
       const page = Number(req.query.page);
