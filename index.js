@@ -174,33 +174,11 @@ async function run() {
     })
 
     // add to the wishlist
-    // situation 1: user sends his wished blog to wishlish with his wishMail
-    // ?userMail=Email
-    app.post('/api/v1/user/add-to-wishlist/:blogId', tokenChecker, async(req, res) => {
-      const id = req.params.blogId;
-      const blogId = { _id: new ObjectId(id) }
-      const userMail = req.query.userMail;
-      const blog = await allBlogsCol.findOne(blogId); // got the blog he wished
-      blog.userMail = userMail;
-      // console.log(blog);
-      const query = { 
-        _id: new ObjectId(id)
-       }
-      if (userMail) {
-        query['userMail'] = userMail;
-      }
-
-      // console.log(query);
-      const exists = await wishlistCol.findOne(query); // does it already exits
-      // console.log(exists);
-      if(exists === null){
-        const ack = await wishlistCol.insertOne(blog);
-        res.send(ack);
-      }
-      else
-        res.send({ acknowledge: false })
-      // console.log(exists);
-      // console.log(blog);
+    
+    app.post('/api/v1/user/add-to-wishlist', tokenChecker, async(req, res) => {
+      const wish = req.body;
+      const ack = await wishlistCol.insertOne(wish);
+      res.send(ack);
     })
 
     // remove from wishlist
