@@ -166,7 +166,7 @@ async function run() {
       // console.log(userMail);
       const query = { }
       if(userMail)
-        query['userMail'] = userMail;
+        query['user_email'] = userMail;
 
       // console.log(query);
       const ack = await wishlistCol.find(query).toArray();
