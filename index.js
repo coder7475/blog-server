@@ -45,7 +45,10 @@ app.use(express.json());
 app.use(cors(
   {
     origin: [
-      'http://localhost:5173'
+      // 'http://localhost:5173',
+      'https://programmers-blog-68efb.web.app/',
+      'https://programmers-blog-68efb.firebaseapp.com/'
+
     ],
     credentials: true
   }
