@@ -239,8 +239,9 @@ async function run() {
       
       res.cookie("token", token, {
           httpOnly: true,
-          secure: true, // ! make it true before deployment
-          sameSite: "none",
+          secure: process.env.NODE_ENV === "production" ? true: false, 
+          sameSite: process.env.NODE_ENV === "production"? "none" : "strict",
+          path: "/"
         })
         .send({ success: true });
         res.end();
@@ -251,7 +252,12 @@ async function run() {
     app.get("/api/v1/clear-token", async (req, res) => {
       // const user = req.body;
       // console.log("logging out", user);
-      res.clearCookie("token").send({ success: true });
+      res.clearCookie("token", {
+        maxAge: 0,
+        secure: process.env.NODE_ENV === "production" ? true: false, 
+        sameSite: process.env.NODE_ENV === "production"? "none" : "strict",
+        path: "/"
+      }).send({ success: true });
       res.end();
     });
 
