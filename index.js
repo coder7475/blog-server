@@ -30,6 +30,7 @@ app.use(
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
   })
 );
+
 // parser
 app.use(express.json());
 app.use(cookieParser());
@@ -234,7 +235,7 @@ async function run() {
     app.post("/api/v1/access-token", async (req, res) => {
       const user = req.body;
       // console.log(user);
-      const token = jwt.sign(user, process.env.SECRET, { expiresIn: "1h" });
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
       
       res.cookie("token", token, {
           httpOnly: true,
@@ -242,15 +243,16 @@ async function run() {
           sameSite: "none",
         })
         .send({ success: true });
+        res.end();
     });
 
     // clear set token in cookie
     // /api/v1/clear-token
-    app.post("/api/v1/clear-token", async (req, res) => {
-      const user = req.body;
-      console.log("logging out", user);
-      res.clearCookie("token");
-      res.send({ success: true });
+    app.get("/api/v1/clear-token", async (req, res) => {
+      // const user = req.body;
+      // console.log("logging out", user);
+      res.clearCookie("token").send({ success: true });
+      res.end();
     });
 
     // Send a ping to confirm a successful connection
