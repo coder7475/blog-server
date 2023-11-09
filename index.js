@@ -86,7 +86,7 @@ async function run() {
       // Search By title
       const title = req.query.title;
 
-      if (title) query["title"] = title;
+      if (title) query["title"] = { $regex: title, $options: 'i' };
 
       // Pagination
       const page = Number(req.query.page);
